@@ -17,7 +17,7 @@ let password = ref("")
 const login = async()=>{
 
     try {
-        const res = postData("login", {
+        const res = await postData("login", {
             email: usuario.value,
             password: password.value
         })
