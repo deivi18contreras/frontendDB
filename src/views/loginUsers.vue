@@ -8,8 +8,8 @@
 
 <script setup>
 
-import { postData } from './services/services.js';
-import {ref} from "vue"
+import { postData } from '../services/services.js';
+
 
 let usuario = ref("")
 let password = ref("")
