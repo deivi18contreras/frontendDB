@@ -9,10 +9,12 @@
 <script setup>
 
 import { postData } from './services/services.js';
+import { useAuthStore } from './store/Auth.js';
 import {ref} from "vue"
 
 let usuario = ref("")
 let password = ref("")
+const authStore = useAuthStore()
 
 const login = async()=>{
 
@@ -23,10 +25,12 @@ const login = async()=>{
         })
 
         console.log(res);
+        authStore.token = res.data.token
+        console.log(authStore.token);
         
 
     } catch (error) {
-        console.log(error);
+        console.log(error.response);
         
     }
 
