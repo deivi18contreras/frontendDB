@@ -1,17 +1,13 @@
-<template>
+ <template>
     <div>
         <input type="text" v-model="usuario"> 
         <input type="text" v-model="password">
         <button @click="login()">login</button>
-        
-        <BotonAmarrillo texto="acceso al portal"/> 
-        <BotonAmarrillo texto="crear usuario"/> 
-        <BotonAmarrillo texto="entrar como Admin"/> 
     </div>
 </template>
 
 <script setup>
-import BotonAmarrillo from '../components/botonAmarrillo.vue';
+
 import { postData } from '../services/services.js';
 import { useAuthStore } from '../store/Auth.js';
 import {ref} from "vue"

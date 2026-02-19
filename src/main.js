@@ -6,6 +6,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import 'quasar/src/css/index.sass'
 import './style.css'
 import App from './App.vue'
+import router from './router/router'
 
 const myApp = createApp(App)
 
@@ -16,5 +17,5 @@ myApp.use(Quasar,{
     plugins: {},
 })
 myApp.use(pinia)
-
+myApp.use(router)
 myApp.mount('#app')
