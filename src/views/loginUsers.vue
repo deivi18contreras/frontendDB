@@ -40,9 +40,11 @@ const login = async () => {
       password: password.value,
     });
 
-    console.log(res);
     authStore.token = res.data.token;
     console.log(authStore.token);
+
+    router.push("/seccionUser")
+    
   } catch (error) {
     console.log(error.response);
   }
