@@ -6,10 +6,8 @@
       <!-- PANEL IZQUIERDO -->
       <div class="visual-panel">
 
-        <img
-          class="background-image"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmb8tUiU6e7G_8n-DBzt9reT9DVwK8UjFK4y3FZpZ0pDA1SRDCCcBnmw3Svrzq8A3N6gGw1RULmBwz2UNljeAzPLYen7GxchrrobfkpZ3lDjNrq3YHHxeWGAa_sQj7-xaNNNzlnHU7HkTvO1HMXdJ5XrU7txQ2DZnzRwnZjcg4uKENJSWnhma4JcyBELSI9-3YTdA2rlNgC91DoPkubXHoM30JKbq3RuOG9nERkJJd5xhH_F3WsX1eJIW8TQazIgNGN-6lTahw1Ig"
-        />
+        <img class="background-image"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmb8tUiU6e7G_8n-DBzt9reT9DVwK8UjFK4y3FZpZ0pDA1SRDCCcBnmw3Svrzq8A3N6gGw1RULmBwz2UNljeAzPLYen7GxchrrobfkpZ3lDjNrq3YHHxeWGAa_sQj7-xaNNNzlnHU7HkTvO1HMXdJ5XrU7txQ2DZnzRwnZjcg4uKENJSWnhma4JcyBELSI9-3YTdA2rlNgC91DoPkubXHoM30JKbq3RuOG9nERkJJd5xhH_F3WsX1eJIW8TQazIgNGN-6lTahw1Ig" />
 
         <div class="overlay"></div>
 
@@ -41,25 +39,13 @@
 
           <q-card-section>
 
-            <q-input
-              filled
-              v-model="usuario"
-              label="Email"
-              dark
-              class="q-mb-md"
-            >
+            <q-input filled v-model="usuario" label="Email" dark class="q-mb-md">
               <template v-slot:prepend>
                 <q-icon name="alternate_email" />
               </template>
             </q-input>
 
-            <q-input
-              filled
-              v-model="password"
-              label="Secret Key"
-              type="password"
-              dark
-            >
+            <q-input filled v-model="password" label="Secret Key" type="password" dark>
               <template v-slot:prepend>
                 <q-icon name="lock_open" />
               </template>
@@ -69,28 +55,15 @@
 
           <q-card-actions vertical>
 
-            <q-btn
-              color="primary"
-              label="Access Portal"
-              class="full-width q-mb-sm"
-              @click="login"
-            />
+            <q-btn color="primary" label="Access Portal" class="full-width q-mb-sm" :loading="loading" @click="login" />
 
-            <q-btn
-              flat
-              label="Crear Usuario"
-              class="full-width"
-              @click="creacionUsuarios"
-            />
+            <q-btn flat label="Crear Usuario" class="full-width" @click="creacionUsuarios" />
+            <q-btn flat no-caps label="¿Olvidaste tu contraseña?" class="full-width text-caption q-mt-none"
+              style="opacity: 0.7;" @click="recuperarPassword" />
 
           </q-card-actions>
 
         </q-card>
-
-        <div class="version-text">
-          V8.0 • Encrypted Connection
-        </div>
-
       </div>
 
     </div>
@@ -103,14 +76,27 @@ import { postData } from "../services/services.js";
 import { useAuthStore } from "../store/Auth.js";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import { useNotifications } from "../composables/useNotifications.js";
+import { useQuasar } from "quasar";
+
 
 const usuario = ref("");
 const password = ref("");
+const loading = ref(false)
+const $q = useQuasar();
 
 const router = useRouter();
 const authStore = useAuthStore();
+const { success, error: notifyError } = useNotifications()
 
 const login = async () => {
+
+  if (!usuario.value || !password.value) {
+    notifyError("Por favor, rellene todos los campos", "Se requiere correo electrónico y contraseña");
+    return;
+  }
+  loading.value = true;
+
   try {
     const res = await postData("login", {
       email: usuario.value,
@@ -118,8 +104,9 @@ const login = async () => {
     });
 
     authStore.token = res.data.token;
+    success(`Bienvenido, ${res.data.usuario.nombre || 'user'}!`, "login success")
 
-    const rol = res.data.usuario.rol;  
+    const rol = res.data.usuario.rol;
 
     if (rol === "admin") {
       router.push("/seccionAdmin");
@@ -129,21 +116,109 @@ const login = async () => {
 
   } catch (error) {
     console.log(error.response);
+    const mensajeError = error.response?.data?.msg || "Creadenaciales incorrectas";
+    const detalleError = error.response?.data?.errors?.[0]?.msg || "verifique sus datos e intente de nuevo"
+    notifyError(mensajeError, detalleError)
+
+
+  } finally {
+    loading.value = false
   }
 };
 
 const creacionUsuarios = () => {
   router.push("/crear-user");
 };
+
+
+const recuperarPassword = () =>{
+  $q.dialog({
+    title: 'Recuperar Contraseña',
+    message: 'Escribe tu correo electrónico y te enviaremos instrucciones.',
+    dark: true,
+    prompt: {
+      model: '',
+      type: 'email',
+      filled: true,
+      label: 'Tu Email'
+    },
+    cancel: true,
+    persistent: true
+  }).onOk(async(emailSolicitado) =>{
+
+    loading.value = true;
+
+    try {
+     const res = await postData("usuario/forgot-password", {email: emailSolicitado});
+     success("Código enviado", res.data.mensaje);
+     pedirNuevoPassword();
+     
+    } catch (error) {
+      const mensaje = error.response?.data?.msg || "Error al solicitar recuperación";
+      notifyError("Error", mensaje);
+    }loading.value = false;
+  })
+}
+
+const pedirNuevoPassword = () => {
+  $q.dialog({
+    title: 'Restablecer Contraseña',
+    message: 'Ingresa el código de 6 dígitos y tu nueva contraseña:',
+    dark: true,
+    prompt: {
+      model: '',
+      type: 'text',
+      label: 'Código de 6 dígitos',
+      filled: true,
+      mask: '######' 
+    },
+    cancel: true,
+    persistent: true
+  }).onOk(async (codigoRecibido) => {
+    
+  
+    $q.dialog({
+      title: 'Nueva Clave',
+      message: 'Escribe tu nueva contraseña (mínimo 8 caracteres):',
+      dark: true,
+      prompt: {
+        model: '',
+        type: 'password',
+        label: 'Nueva Contraseña',
+        filled: true
+      },
+      cancel: true
+    }).onOk(async (newPassword) => {
+      loading.value = true;
+      try {
+        
+        await postData("usuario/reset-password", { 
+          token: codigoRecibido, 
+          newPassword: newPassword
+        });
+
+        success("¡Éxito!", "Contraseña actualizada correctamente");
+      } catch (error) {
+        const msg = error.response?.data?.mensaje || "Código inválido o expirado";
+        notifyError("Error", msg);
+      } finally {
+        loading.value = false;
+      }
+    });
+  });
+};
+
 </script>
 
 <style scoped>
-body{
+body {
   margin: 0;
   padding: 0;
 }
+
 .login-page {
-  width: 100vw;        /* 👈 FORZAMOS ancho completo */
+  width: 100vw;
+  /* 👈 FORZAMOS ancho completo */
   height: 100vh;
   overflow: hidden;
 }
@@ -152,14 +227,15 @@ body{
 
 .login-container {
   display: flex;
- 
+
 }
 
 /* ================= PANEL VISUAL ================= */
 
 .visual-panel {
   position: relative;
-  width: 50vw;         /* 👈 Mitad real de pantalla */
+  width: 50vw;
+  /* 👈 Mitad real de pantalla */
   height: 100vh;
   background: #0a0a0c;
   overflow: hidden;
@@ -213,7 +289,8 @@ body{
 /* ================= PANEL FORM ================= */
 
 .form-panel {
-  width: 50vw;         /* 👈 Mitad real */
+  width: 50vw;
+  /* 👈 Mitad real */
   height: 100vh;
   background: #4A148C;
   display: flex;
@@ -232,8 +309,8 @@ body{
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(18px);
   border-radius: 26px;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
 }
 
 /* TEXTOS */
@@ -318,5 +395,4 @@ body{
     font-size: 12px;
   }
 }
-
 </style>

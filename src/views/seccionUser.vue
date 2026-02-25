@@ -13,25 +13,20 @@
         <div class="header-actions">
           <q-btn round flat icon="notifications" />
           <q-avatar size="42px">
-            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuANvVnTSnvzzLkpT6Wom5BAZ8s8qtj2dl2Z4zZPWlIIKh6gc64vqTmqpTQ6zDO42evyChWepxfhsq3YH1-_bc9LFG14RI6nBSf0psRI2x5xObBoc-05X8a7WiYLFqxh6lbfFFSgNA-sUsQaCccepC1qRPWDkdihz26v2M7p3RQX2xHY_W6QO2yPCeqp6VDRkmjq9BZbCN2zhnUxDak0V9fkZ1B51XM9ViufRI3GhYZlOiXBykkd4POoEUxLB-VWGhvlhsvnjFDiZuI" />
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuANvVnTSnvzzLkpT6Wom5BAZ8s8qtj2dl2Z4zZPWlIIKh6gc64vqTmqpTQ6zDO42evyChWepxfhsq3YH1-_bc9LFG14RI6nBSf0psRI2x5xObBoc-05X8a7WiYLFqxh6lbfFFSgNA-sUsQaCccepC1qRPWDkdihz26v2M7p3RQX2xHY_W6QO2yPCeqp6VDRkmjq9BZbCN2zhnUxDak0V9fkZ1B51XM9ViufRI3GhYZlOiXBykkd4POoEUxLB-VWGhvlhsvnjFDiZuI" />
           </q-avatar>
         </div>
       </div>
 
       <!-- TABS -->
       <div class="nav-tabs">
-        <div 
-          :class="['tab', activeTab === 'readings' && 'tab-active']"
-          @click="activeTab = 'readings'"
-        >
+        <div :class="['tab', activeTab === 'readings' && 'tab-active']" @click="activeTab = 'readings'">
           <q-icon name="auto_stories" />
           <span>Lecturas</span>
         </div>
 
-        <div 
-          :class="['tab', activeTab === 'membership' && 'tab-active']"
-          @click="activeTab = 'membership'"
-        >
+        <div :class="['tab', activeTab === 'membership' && 'tab-active']" @click="activeTab = 'membership'">
           <q-icon name="card_membership" />
           <span>Membresía</span>
         </div>
@@ -104,7 +99,6 @@ const activeTab = ref("readings");
 </script>
 
 <style scoped>
-
 /* PAGE */
 
 .portal-page {
@@ -119,9 +113,9 @@ const activeTab = ref("readings");
   position: sticky;
   top: 0;
   backdrop-filter: blur(18px);
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   padding: 24px;
-  border-bottom: 1px solid rgba(212,175,55,0.1);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
 }
 
 .header-row {
@@ -167,7 +161,7 @@ const activeTab = ref("readings");
 /* CONTENT */
 
 .content {
- 
+
   max-width: 100vw;
   margin: auto;
 }
@@ -175,10 +169,10 @@ const activeTab = ref("readings");
 /* CARDS */
 
 .glass-card {
-  background: rgba(74,20,140,0.15);
+  background: rgba(74, 20, 140, 0.15);
   backdrop-filter: blur(16px);
   border-radius: 18px;
-  border: 1px solid rgba(212,175,55,0.15);
+  border: 1px solid rgba(212, 175, 55, 0.15);
 }
 
 /* GOLD BUTTON */
@@ -201,7 +195,7 @@ const activeTab = ref("readings");
   width: 70px;
   height: 70px;
   border-radius: 16px;
-  background: rgba(212,175,55,0.1);
+  background: rgba(212, 175, 55, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -238,7 +232,7 @@ const activeTab = ref("readings");
   bottom: 0;
   width: 100%;
   height: 46px;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -247,8 +241,7 @@ const activeTab = ref("readings");
 .home-indicator {
   width: 140px;
   height: 5px;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
 }
-
 </style>

@@ -43,50 +43,25 @@
 
             <q-card-section>
 
-              <q-input
-                filled
-                v-model="username"
-                label="Username"
-                dark
-                class="q-mb-md"
-              >
+              <q-input filled v-model="username" label="Username" dark class="q-mb-md">
                 <template v-slot:prepend>
                   <q-icon name="person" />
                 </template>
               </q-input>
 
-              <q-input
-                filled
-                v-model="email"
-                label="Gmail"
-                dark
-                class="q-mb-md"
-              >
+              <q-input filled v-model="email" label="Gmail" dark class="q-mb-md">
                 <template v-slot:prepend>
                   <q-icon name="alternate_email" />
                 </template>
               </q-input>
 
-              <q-input
-                filled
-                v-model="password"
-                label="Password"
-                type="password"
-                dark
-                class="q-mb-md"
-              >
+              <q-input filled v-model="password" label="Password" type="password" dark class="q-mb-md">
                 <template v-slot:prepend>
                   <q-icon name="key" />
                 </template>
               </q-input>
 
-              <q-input
-                filled
-                v-model="fechaNacimiento"
-                label="Fecha de Nacimiento"
-                type="date"
-                dark
-              >
+              <q-input filled v-model="fechaNacimiento" label="Fecha de Nacimiento" type="date" dark>
                 <template v-slot:prepend>
                   <q-icon name="calendar_month" />
                 </template>
@@ -95,11 +70,7 @@
             </q-card-section>
 
             <q-card-actions>
-              <q-btn
-                label="Crear Cuenta"
-                class="gold-button full-width"
-                @click="crearCuenta"
-              />
+              <q-btn label="Crear Cuenta" class="gold-button full-width" @click="crearCuenta" />
             </q-card-actions>
 
           </q-card>
@@ -135,13 +106,12 @@ const crearCuenta = () => {
     password: password.value,
     fechaNacimiento: fechaNacimiento.value
   });
-
+  router.push("/")
   // luego conectamos backend
 };
 </script>
 
 <style scoped>
-
 .register-page {
   min-height: 100vh;
 }
@@ -166,8 +136,8 @@ const crearCuenta = () => {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
   opacity: 0.25;
 }
@@ -181,7 +151,7 @@ const crearCuenta = () => {
   transform: translateY(-50%);
   width: 260px;
   height: 260px;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -192,7 +162,7 @@ const crearCuenta = () => {
   position: absolute;
   width: 180px;
   height: 180px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transform: rotate(45deg);
 }
 
@@ -204,7 +174,7 @@ const crearCuenta = () => {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 2px solid rgba(242,208,13,0.25);
+  border: 2px solid rgba(242, 208, 13, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -221,15 +191,32 @@ const crearCuenta = () => {
 .floating-number {
   position: absolute;
   font-size: 60px;
-  color: rgba(255,255,255,0.04);
+  color: rgba(255, 255, 255, 0.04);
   font-style: italic;
   pointer-events: none;
 }
 
-.n1 { top: 18%; right: 30%; }
-.n2 { bottom: 18%; right: 40%; }
-.n3 { top: 40%; right: 52%; font-size: 36px; }
-.n4 { bottom: 38%; right: 18%; font-size: 36px; }
+.n1 {
+  top: 18%;
+  right: 30%;
+}
+
+.n2 {
+  bottom: 18%;
+  right: 40%;
+}
+
+.n3 {
+  top: 40%;
+  right: 52%;
+  font-size: 36px;
+}
+
+.n4 {
+  bottom: 38%;
+  right: 18%;
+  font-size: 36px;
+}
 
 /* ===== PANEL FORMULARIO ===== */
 
@@ -244,7 +231,8 @@ const crearCuenta = () => {
 
 .form-wrapper {
   width: 100%;
-  max-width: 460px;   /* 👈 Tamaño elegante para PC */
+  max-width: 460px;
+  /* 👈 Tamaño elegante para PC */
 }
 
 /* ===== TÍTULO ===== */
@@ -270,10 +258,10 @@ const crearCuenta = () => {
 /* ===== GLASS CARD ===== */
 
 .glass-container {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(18px);
   border-radius: 22px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 10px;
 }
 
