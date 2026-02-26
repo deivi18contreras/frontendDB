@@ -70,7 +70,7 @@
             </q-card-section>
 
             <q-card-actions>
-              <q-btn label="Crear Cuenta" class="gold-button full-width" @click="crearCuenta" />
+              <q-btn label="Crear Cuenta" class="gold-button full-width" :loading="loading"  @click="crearUsuario()" />
             </q-card-actions>
 
           </q-card>
@@ -91,6 +91,10 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { postData } from "../services/services";
+import { useNotifications } from "../composables/useNotifications";
+
+const {success, errorAlert} = useNotifications()
 
 const router = useRouter();
 
@@ -98,6 +102,7 @@ const username = ref("");
 const email = ref("");
 const password = ref("");
 const fechaNacimiento = ref("");
+const loading = ref(false)
 
 const crearCuenta = () => {
   console.log("Crear usuario", {
@@ -107,8 +112,32 @@ const crearCuenta = () => {
     fechaNacimiento: fechaNacimiento.value
   });
   router.push("/")
+
   // luego conectamos backend
 };
+
+const crearUsuario = async () =>{
+  try {
+    const Usuario = await postData("usuario", {
+      nombre: username.value,
+      email: email.value,
+      fechaNacimiento: fechaNacimiento.value,
+      password: password.value,
+      rol:"user"
+    })
+    if (Usuario) {
+      router.push("/")
+      success("Bienvenido a su linea de vida")
+    }
+    
+  } catch (error) {
+    console.log(error.response);
+    
+    errorAlert(error.response.data.msg || error.response.data.errors[0].msg)
+  } finally{
+    loading.value = false
+  }
+}
 </script>
 
 <style scoped>
