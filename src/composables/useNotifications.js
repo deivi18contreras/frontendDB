@@ -22,7 +22,7 @@ export function useNotifications() {
     })
   }
 
-  const errorAlert = (message, caption = '') => {
+  const error  = (message, caption = '') => {
     Notify.create({
       message: message,
       caption: caption,
@@ -82,5 +82,6 @@ export function useNotifications() {
     })
   }
 
+  return { success, errorAlert, warning, info }
   return { success, errorAlert, warning, info }
 }
