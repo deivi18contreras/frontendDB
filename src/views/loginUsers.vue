@@ -87,12 +87,12 @@ const $q = useQuasar();
 
 const router = useRouter();
 const authStore = useAuthStore();
-const { success, error: notifyError } = useNotifications()
+const { success, errorAlert } = useNotifications()
 
 const login = async () => {
 
   if (!usuario.value || !password.value) {
-    notifyError("Por favor, rellene todos los campos", "Se requiere correo electrónico y contraseña");
+    errorAlert("Por favor, rellene todos los campos", "Se requiere correo electrónico y contraseña");
     return;
   }
   loading.value = true;
@@ -116,9 +116,11 @@ const login = async () => {
 
   } catch (error) {
     console.log(error.response);
-    const mensajeError = error.response?.data?.msg || "Creadenaciales incorrectas";
-    const detalleError = error.response?.data?.errors?.[0]?.msg || "verifique sus datos e intente de nuevo"
-    notifyError(mensajeError, detalleError)
+    const mensajeError = error.response?.data?.msg || error.response.data.errors[0].msg ;
+    errorAlert(mensajeError)
+
+
+
 
 
   } finally {
@@ -155,7 +157,7 @@ const recuperarPassword = () =>{
      
     } catch (error) {
       const mensaje = error.response?.data?.msg || "Error al solicitar recuperación";
-      notifyError("Error", mensaje);
+      errorAlert("Error", mensaje);
     }loading.value = false;
   })
 }
@@ -200,7 +202,7 @@ const pedirNuevoPassword = () => {
         success("¡Éxito!", "Contraseña actualizada correctamente");
       } catch (error) {
         const msg = error.response?.data?.mensaje || "Código inválido o expirado";
-        notifyError("Error", msg);
+        errorAlert("Error", msg);
       } finally {
         loading.value = false;
       }
